@@ -6368,22 +6368,69 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 
-const SignIn = ({
-  signIn
-}) => {
-  // console.log(signIn);
+
+const SignIn = () => {
   const [username, setUsername] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
   const [password, setPassword] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
+  const [auth, setAuth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({});
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    attemptTokenLogin();
+  }, []);
   const onChange = ev => {
     if (ev.target.name === "username") setUsername(ev.target.value);
     if (ev.target.name === "password") setPassword(ev.target.value);
   };
   const onSubmit = ev => {
     ev.preventDefault();
-    // signIn({ username, password });
+    signIn({
+      username,
+      password
+    });
   };
-
+  const signIn = async credentials => {
+    //credentials is username and password
+    console.log(credentials);
+    const response = await axios__WEBPACK_IMPORTED_MODULE_1__["default"].post("/auth", credentials);
+    console.log(response);
+    //response.data has the token within,
+    //it is destructured from data below
+    const {
+      token
+    } = response.data;
+    console.log(token);
+    //localStorage is set with the token
+    window.localStorage.setItem("token", token);
+    //calls the attemtTokenLogin on line 47
+    attemptTokenLogin();
+  };
+  const attemptTokenLogin = async () => {
+    //grabs token from localStorage
+    const token = window.localStorage.getItem("token");
+    //if it exists
+    // console.log(token);
+    if (token) {
+      //what is the syntax doing below
+      const {
+        data: auth
+      } = await axios__WEBPACK_IMPORTED_MODULE_1__["default"].get("/auth", {
+        headers: {
+          authorization: token
+        }
+      });
+      // console.log(data);
+      //calls setAuth with the auth from database to the useState
+      setAuth(auth);
+      const {
+        data
+      } = await axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(`/api/users/${auth.id}/notes`, {
+        headers: {
+          authorization: token
+        }
+      });
+    }
+  };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     onSubmit: onSubmit
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {

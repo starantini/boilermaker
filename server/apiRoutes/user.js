@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const { User } = require("../db");
 
-// matches GET requests to /api/puppies/
 router.get("/", async (req, res, next) => {
   try {
     const users = await User.findAll({

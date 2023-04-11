@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const axios = require("axios");
 
-const SALT_ROUNDS = 5;
+// const SALT_ROUNDS = 5;
 
 const User = db.define("users", {
   username: {
@@ -42,12 +42,14 @@ User.authenticate = async function ({ username, password }) {
 User.findByToken = async function (token) {
   try {
     const { id } = await jwt.verify(token, process.env.JWT);
+    console.log(id, process.env.JWT);
     const user = User.findByPk(id);
     if (!user) {
       throw "nooo";
     }
     return user;
   } catch (ex) {
+    console.error(ex);
     const error = Error("bad token");
     error.status = 401;
     throw error;
@@ -57,12 +59,12 @@ User.findByToken = async function (token) {
 /**
  * hooks
  */
-const hashPassword = async (user) => {
-  //in case the password has been changed, we want to encrypt it with bcrypt
-  if (user.changed("password")) {
-    user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
-  }
-};
+// const hashPassword = async (user) => {
+//   //in case the password has been changed, we want to encrypt it with bcrypt
+//   if (user.changed("password")) {
+//     user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
+//   }
+// };
 
 User.beforeCreate(async (user, option) => {
   const hashedPassword = await bcrypt.hash(user.password, 10);
