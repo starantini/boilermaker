@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import AllUsers from "./allUsers";
+import SignIn from "./signIn";
 
 const Main = () => {
   return (
@@ -11,6 +12,7 @@ const Main = () => {
       </nav>
 
       <Routes>
+        <Route path="/" element={<SignIn />}></Route>
         <Route path="/users" element={<AllUsers />}></Route>
       </Routes>
     </div>
