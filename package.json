@@ -11,6 +11,8 @@
   "author": "Dan T",
   "license": "ISC",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.3",
+    "axios": "^1.3.5",
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "morgan": "^1.10.0",
@@ -18,7 +20,11 @@
     "pg-hstore": "^2.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.10.0",
+    "redux": "^4.2.1",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.4.2",
     "sequelize": "^6.31.0"
   },
   "devDependencies": {
